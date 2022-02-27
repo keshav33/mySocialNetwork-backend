@@ -1,14 +1,20 @@
 const { getDb } = require('../utils/mongo');
 const mongodb = require('mongodb');
 
-exports.findAllPosts = () => {
+exports.findAllPosts = (userId) => {
     return new Promise((resolve, reject) => {
         const db = getDb();
         db.collection('posts').find({}).toArray((err, result) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(result || []);
+                const formatedResult = (result || []).map(post => {
+                    return {
+                        ...post,
+                        isLiked: post.likes.includes(userId)
+                    }
+                })
+                resolve(formatedResult);
             }
         })
     })

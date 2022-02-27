@@ -2,7 +2,8 @@ const { findAllPosts, insertNewPost, insertNewComment, toggleLikeOnPostOrComment
 const { getCurrentDate } = require("../utils/formater");
 
 exports.getAllPost = (req, res) => {
-    findAllPosts()
+    const { userId } = req.query;
+    findAllPosts(userId)
         .then((result) => {
             res.status(202).send({posts: result});
         }).catch(error => {
